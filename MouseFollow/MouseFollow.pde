@@ -60,8 +60,23 @@ float previousRotation = 0;
 boolean isOpen = true;
 float currentPacManTime = 0;
 float timeToBite = 0.3;
+float speedTarget = 100;
+float maxAcceleration = 100;
 
 void update(float dt){
+  if(speedTarget != speed){
+    if(Math.abs(speedTarget-speed) <= maxAcceleration * dt){
+     speed = speedTarget;
+    }else{
+      if(speedTarget-speed > 0){
+        speed += maxAcceleration * dt;
+      }else{
+        speed -= maxAcceleration * dt;
+      }
+      
+    }
+  }
+  
   mousePos = new Vec2(mouseX, mouseY);
   Vec2 dir = mousePos.minus(pos); //Should be vector pointing from pos to MousePos
   if (dir.length() > 0) dir.normalize();
@@ -109,10 +124,10 @@ void draw(){
 
 void keyPressed(){
   if (key == 'd'){
-    speed *= 2;
+    speedTarget *= 2;
   }
   if (key == 'h'){
-    speed *= 0.5;
+    speedTarget *= 0.5;
   }
   println("Speed is now:",speed);
 }
